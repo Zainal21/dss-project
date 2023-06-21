@@ -1,5 +1,6 @@
 import { ProblemDto } from './problems.dto';
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -26,7 +27,7 @@ export class ProblemsController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  createProblem(ProblemDto: ProblemDto) {
+  createProblem(@Body() ProblemDto: ProblemDto) {
     return this.problemsService.createProblem(ProblemDto);
   }
 

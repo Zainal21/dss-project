@@ -28,7 +28,7 @@ export class CategoriesController {
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   async findById(@Param('id') id) {
-    return await this.categoriesService.getCategoryByid(id);
+    return await this.categoriesService.getCategoryById(id);
   }
 
   @HttpCode(HttpStatus.OK)

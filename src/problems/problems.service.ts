@@ -25,25 +25,20 @@ export class ProblemsService {
    * @return  {Promise<ApiResponse>}          [return ]
    */
   async getProblemByUserId(userId: string | any): Promise<ApiResponse> {
-    try {
-      const problems = await this.problemRepository.find({
-        where: {
-          user: userId,
+    const problems = await this.problemRepository.find({
+      where: {
+        user: {
+          id: userId,
         },
-      });
+      },
+    });
 
-      if (problems.length > 0) {
-        return {
-          statusCode: 201,
-          message: 'Problem by user get successfully',
-          data: problems,
-        };
-      } else {
-        throw new NotFoundException('Problem by user not found');
-      }
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    if (problems.length < 1) throw new NotFoundException('Problem not found');
+    return {
+      statusCode: 201,
+      message: 'Problem by user get successfully',
+      data: problems,
+    };
   }
 
   /**
@@ -79,25 +74,19 @@ export class ProblemsService {
    * @return  {Promise<ApiResponse>}                 [return ]
    */
   async createProblem(ProblemDto: ProblemDto): Promise<ApiResponse> {
-    try {
-      // check user is exist
-      const user = await this.userRepository.findOneBy({
-        id: ProblemDto.userId,
-      });
+    // check user is exist
+    const user = await this.userRepository.findOneBy({
+      id: ProblemDto.userId,
+    });
 
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
+    if (!user) throw new NotFoundException('User not found');
 
-      const problem = this.problemRepository.create(ProblemDto);
-      return {
-        statusCode: 200,
-        message: 'Problem created successfully',
-        data: problem,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const problem = await this.problemRepository.save(ProblemDto);
+    return {
+      statusCode: 200,
+      message: 'Problem created successfully',
+      data: problem,
+    };
   }
 
   /**
@@ -110,28 +99,22 @@ export class ProblemsService {
     id: string,
     userId: string,
   ): Promise<ApiResponse> {
-    try {
-      const user = await this.userRepository.findOneBy({
-        id: ProblemDto.userId,
-      });
+    const user = await this.userRepository.findOneBy({
+      id: ProblemDto.userId,
+    });
 
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
+    if (!user) throw new NotFoundException('User not found');
 
-      const problem = this.problemRepository.create({
-        id: id,
-        userId: userId,
-        ...ProblemDto,
-      });
-      return {
-        statusCode: 200,
-        message: 'Problem updated successfully',
-        data: problem,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const problem = await this.problemRepository.save({
+      id: id,
+      userId: userId,
+      ...ProblemDto,
+    });
+    return {
+      statusCode: 200,
+      message: 'Problem updated successfully',
+      data: problem,
+    };
   }
 
   /**
@@ -142,18 +125,16 @@ export class ProblemsService {
    * @return  {Promise<ApiResponse>}      [return ]
    */
   async deleteProblemById(id: string): Promise<ApiResponse> {
-    try {
-      const problem = await this.problemRepository.delete({
-        id: id,
-      });
+    const problem = await this.problemRepository.delete({
+      id: id,
+    });
 
-      return {
-        statusCode: 200,
-        message: 'Problem delete successfully',
-        data: problem,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    if (!problem) throw new NotFoundException('Problem Not Found');
+
+    return {
+      statusCode: 200,
+      message: 'Problem delete successfully',
+      data: problem,
+    };
   }
 }

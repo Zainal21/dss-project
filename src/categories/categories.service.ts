@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -23,6 +24,8 @@ export class CategoriesService {
    */
   async findAll(): Promise<ApiResponse> {
     const categories = await this.categoryRepository.find();
+    if (categories.length < 1)
+      throw new NotFoundException('Categories not found');
     return {
       statusCode: 200,
       message: 'Category data get successfully',
@@ -38,37 +41,30 @@ export class CategoriesService {
    * @return  {Promise<ApiResponse>}                   [return]
    */
   async createCategory(categoryDto: CategoryDto): Promise<ApiResponse> {
-    try {
-      const category = await this.categoryRepository.save(categoryDto);
-      return {
-        statusCode: 201,
-        message: 'Catagory created successfully',
-        data: category,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const category = await this.categoryRepository.save(categoryDto);
+    if (!category) throw new BadRequestException('Category data not valid');
+    return {
+      statusCode: 201,
+      message: 'Catagory created successfully',
+      data: category,
+    };
   }
 
   /**
-   * [getCategoryByid]
+   * [getCategoryById]
    *
    * @param   {string<ApiResponse>}   id  [id]
    *
    * @return  {Promise<ApiResponse>}      [return]
    */
-  async getCategoryByid(id: string): Promise<ApiResponse> {
-    try {
-      const category = await this.categoryRepository.findOneBy({ id });
-      if (!category) throw new NotFoundException('Category not found');
-      return {
-        statusCode: 200,
-        message: 'Category data get successfully',
-        data: category,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+  async getCategoryById(id: string): Promise<ApiResponse> {
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) throw new NotFoundException('Category not found');
+    return {
+      statusCode: 200,
+      message: 'Category data get successfully',
+      data: category,
+    };
   }
 
   /**
@@ -80,19 +76,16 @@ export class CategoriesService {
     id: string,
     CategoryDto: CategoryDto,
   ): Promise<ApiResponse> {
-    try {
-      const category = await this.categoryRepository.save({
-        id: id,
-        ...CategoryDto,
-      });
-      return {
-        statusCode: 200,
-        message: 'Category udpated get successfully',
-        data: category,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const category = await this.categoryRepository.save({
+      id: id,
+      ...CategoryDto,
+    });
+    if (!category) throw new BadRequestException('Category data not valid');
+    return {
+      statusCode: 200,
+      message: 'Category udpated get successfully',
+      data: category,
+    };
   }
 
   /**
@@ -103,15 +96,12 @@ export class CategoriesService {
    * @return  {Promise<ApiResponse>}      [return]
    */
   async deleteCategory(id: string): Promise<ApiResponse> {
-    try {
-      const category = await this.categoryRepository.delete({ id });
-      return {
-        statusCode: 200,
-        message: 'Category deleted get successfully',
-        data: category,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const category = await this.categoryRepository.delete({ id });
+    if (!category) throw new BadRequestException('Category data not valid');
+    return {
+      statusCode: 200,
+      message: 'Category deleted get successfully',
+      data: category,
+    };
   }
 }

@@ -33,33 +33,24 @@ export class AuthService {
    * @return  {Promise<ApiResponse>}                   [return]
    */
   async signUp(RegisterDto: RegisterDto): Promise<ApiResponse> {
-    try {
-      const user = await this.UserRepository.findOneBy({
-        email: RegisterDto.email,
-      });
+    const user = await this.UserRepository.findOneBy({
+      email: RegisterDto.email,
+    });
 
-      if (user) {
-        throw new BadRequestException('User already exist');
-      }
+    if (user) throw new BadRequestException('User already exist');
 
-      const passwordhash = await bcrypt.hash(
-        RegisterDto.password,
-        saltOrRounds,
-      );
-      RegisterDto.password = passwordhash;
-      await this.UserRepository.save({
-        id: id,
-        ...RegisterDto,
-      });
+    const passwordhash = await bcrypt.hash(RegisterDto.password, saltOrRounds);
+    RegisterDto.password = passwordhash;
+    await this.UserRepository.save({
+      id: id,
+      ...RegisterDto,
+    });
 
-      return {
-        statusCode: 200,
-        message: 'user register successfully',
-        data: 1,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    return {
+      statusCode: 200,
+      message: 'user register successfully',
+      data: 1,
+    };
   }
 
   /**
@@ -70,35 +61,27 @@ export class AuthService {
    * @return  {Promise<ApiResponse>}             [return]
    */
   async login(LoginDto: LoginDto): Promise<ApiResponse> {
-    try {
-      const user = await this.UserRepository.findOneBy({
-        email: LoginDto.email,
-      });
+    const user = await this.UserRepository.findOneBy({
+      email: LoginDto.email,
+    });
 
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
+    if (!user) throw new NotFoundException('User not found');
 
-      const isPasswordMatch = await bcrypt.compare(
-        LoginDto.password,
-        user?.password,
-      );
+    const isPasswordMatch = await bcrypt.compare(
+      LoginDto.password,
+      user?.password,
+    );
 
-      if (!isPasswordMatch) {
-        throw new BadRequestException('password not match');
-      }
+    if (!isPasswordMatch) throw new BadRequestException('password not match');
 
-      const payload = { sub: user.id, username: user.email };
+    const payload = { sub: user.id, username: user.email };
 
-      return {
-        statusCode: 200,
-        message: 'Login successfully',
-        data: {
-          access_token: await this.jwtService.signAsync(payload),
-        },
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    return {
+      statusCode: 200,
+      message: 'Login successfully',
+      data: {
+        access_token: await this.jwtService.signAsync(payload),
+      },
+    };
   }
 }
