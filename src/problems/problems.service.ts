@@ -49,21 +49,17 @@ export class ProblemsService {
    * @return  {Promise<ApiResponse>}      [return ]
    */
   async getProblemById(id: string): Promise<ApiResponse> {
-    try {
-      const problem = await this.problemRepository.findOneBy({
-        id: id,
-      });
+    const problem = await this.problemRepository.findOneBy({
+      id: id,
+    });
 
-      if (!problem) throw new NotFoundException('problem not found');
+    if (!problem) throw new NotFoundException('problem not found');
 
-      return {
-        statusCode: 200,
-        message: 'Problem detail get successfully',
-        data: problem,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    return {
+      statusCode: 200,
+      message: 'Problem detail get successfully',
+      data: problem,
+    };
   }
 
   /**
