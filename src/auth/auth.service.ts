@@ -40,15 +40,17 @@ export class AuthService {
 
     const passwordhash = await bcrypt.hash(RegisterDto.password, saltOrRounds);
     RegisterDto.password = passwordhash;
-    await this.UserRepository.save({
+    const register = await this.UserRepository.save({
       id: id,
       ...RegisterDto,
     });
 
+    if (!register) throw new BadRequestException('Register Data Invalid value');
+
     return {
       statusCode: 200,
       message: 'user register successfully',
-      data: 1,
+      data: register,
     };
   }
 
