@@ -10,6 +10,10 @@ Simple application for Identification problem and provide some solution, build u
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
+## Tech Stack
+
+**Library and Framework:** Nest JS, JWT, TypeORM, class-validator, dotenv, mysql2, bcrypt, etc
+
 ## API Reference
 
 #### Authentication
