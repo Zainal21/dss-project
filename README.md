@@ -42,7 +42,7 @@ http:example.com:3000/classifications
 
 #### More endpoint can clone/fork/download Postman Collection
 
-#### Comming soon
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/9050639-aac61fdd-3274-4bf3-9720-ee8c461274f1?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D9050639-aac61fdd-3274-4bf3-9720-ee8c461274f1%26entityType%3Dcollection%26workspaceId%3Df0c55199-3b92-4de3-9900-d7129d74ec5f)
 
 ## Screenshots (Database Schema)
 
