@@ -19,28 +19,28 @@ Simple application for Identification problem and provide some solution, build u
 #### Authentication
 
 ```http
- {BASE_ENDPOINT}/auth/{register/login}
+BASE_ENDPOINT/auth/register/login
 ```
 
 #### Categories
 
 ```http
-{BASE_ENDPOINT}/categories
+BASE_ENDPOINT/categories
 ```
 
 #### Problems
 
 ```http
-{BASE_ENDPOINT}/problems
+BASE_ENDPOINT/problems
 ```
 
 #### Classification
 
 ```http
-{BASE_ENDPOINT}/classifications
+BASE_ENDPOINT/classifications
 ```
 
-#### More Endpoint can Fork/Import Collection
+#### More endpoint can clone/fork/download Postman Collection
 
 #### Comming soon
 
@@ -84,10 +84,6 @@ $ yarn run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Authors
+Copyright © 2022 by Muhamad Zainal Arifin
 
-- [@Zainal21](https://www.github.com/Zainal21)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+> The Project is Under MIT licensed.
