@@ -16,11 +16,20 @@ export class Classifications {
   @Column()
   classificationName: string;
 
-  @ManyToOne(() => Users, (user) => user.problem)
+  @ManyToOne(() => Users, (user) => user.problem, {
+    cascade: ['update'],
+  })
   user: Users;
 
-  @ManyToOne(() => Problems, (problem) => problem.clasification)
+  @ManyToOne(() => Problems, (problem) => problem.clasification, {
+    cascade: ['update'],
+  })
   problem: Problems;
+
+  @Column({
+    type: 'text',
+  })
+  answer: string;
 
   @CreateDateColumn()
   createdAt: Date;

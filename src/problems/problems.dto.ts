@@ -8,4 +8,8 @@ export class ProblemDto {
   @IsString()
   @IsNotEmpty()
   userId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
 }

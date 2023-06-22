@@ -1,20 +1,19 @@
 import { ProblemDto } from './problems.dto';
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Problems } from './problems.entity';
 import { Repository } from 'typeorm';
 import { ApiResponse } from 'src/shared/utils/api-response.interface';
 import { Users } from 'src/auth/entities/users.entity';
+import { Categories } from 'src/categories/categories.entity';
 
 @Injectable()
 export class ProblemsService {
   constructor(
     @InjectRepository(Problems) private problemRepository: Repository<Problems>,
     @InjectRepository(Users) private userRepository: Repository<Users>,
+    @InjectRepository(Categories)
+    private categoryRepository: Repository<Categories>,
   ) {}
 
   /**
@@ -34,6 +33,7 @@ export class ProblemsService {
     });
 
     if (problems.length < 1) throw new NotFoundException('Problem not found');
+
     return {
       statusCode: 201,
       message: 'Problem by user get successfully',
@@ -77,7 +77,19 @@ export class ProblemsService {
 
     if (!user) throw new NotFoundException('User not found');
 
-    const problem = await this.problemRepository.save(ProblemDto);
+    // check category is exist
+    const categories = await this.categoryRepository.findOneBy({
+      id: ProblemDto.categoryId,
+    });
+
+    if (!categories) throw new NotFoundException('Categories not found');
+
+    const { problemName, userId, categoryId } = ProblemDto;
+    const problem = await this.problemRepository.save({
+      problemName,
+      user: { id: userId },
+      category: { id: categoryId },
+    });
     return {
       statusCode: 200,
       message: 'Problem created successfully',
@@ -101,9 +113,17 @@ export class ProblemsService {
 
     if (!user) throw new NotFoundException('User not found');
 
+    // check category is exist
+    const categories = await this.categoryRepository.findOneBy({
+      id: ProblemDto.categoryId,
+    });
+
+    if (!categories) throw new NotFoundException('Categories not found');
+
     const problem = await this.problemRepository.save({
       id: id,
       userId: userId,
+      category: { id: ProblemDto.categoryId },
       ...ProblemDto,
     });
     return {

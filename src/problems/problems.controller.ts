@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ProblemDto } from './problems.dto';
 import {
   Body,
@@ -25,6 +26,12 @@ export class ProblemsController {
     return this.problemsService.getProblemByUserId(userId);
   }
 
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  getDetailProblem(@Param('id') id) {
+    return this.problemsService.getProblemById(id);
+  }
+
   @Post()
   @HttpCode(HttpStatus.OK)
   createProblem(@Body() ProblemDto: ProblemDto) {
@@ -39,12 +46,6 @@ export class ProblemsController {
     @Param('userId') userId,
   ) {
     return this.problemsService.updateProblem(ProblemDto, id, userId);
-  }
-
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  getDetailProblem(@Param('id') id) {
-    return this.problemsService.getProblemById(id);
   }
 
   @Delete(':id')

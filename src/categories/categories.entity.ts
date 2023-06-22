@@ -7,6 +7,7 @@ import {
 
 @Entity()
 export class Categories {
+  [x: string]: any;
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

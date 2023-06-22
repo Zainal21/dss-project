@@ -7,6 +7,7 @@ import { ProblemsModule } from './problems/problems.module';
 import { ClassificationsModule } from './classifications/classifications.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConnectionService } from './shared/services/database-connection.service';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { DatabaseConnectionService } from './shared/services/database-connection
     ClassificationsModule,
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConnectionService,
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
     }),
   ],
   controllers: [AppController],
