@@ -146,7 +146,7 @@ export class ProblemsService {
       id: id,
     });
 
-    if (!problem) throw new NotFoundException('Problem Not Found');
+    if (problem?.affected < 1) throw new NotFoundException('Problem Not Found');
 
     return {
       statusCode: 200,

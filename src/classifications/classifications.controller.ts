@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -40,7 +41,7 @@ export class ClassificationsController {
     );
   }
 
-  @Delete(':id')
+  @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async updateProblem(
     @Param('id') id: string,
@@ -55,6 +56,7 @@ export class ClassificationsController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async deleteClassification(@Param('id') id) {
+    console.log(id);
     return this.classificationsService.deleteClassification(id);
   }
 }

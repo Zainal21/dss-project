@@ -96,7 +96,8 @@ export class CategoriesService {
    */
   async deleteCategory(id: string): Promise<ApiResponse> {
     const category = await this.categoryRepository.delete({ id });
-    if (!category) throw new BadRequestException('Category data not valid');
+    if (category?.affected < 1)
+      throw new BadRequestException('Category data not valid');
     return {
       statusCode: 200,
       message: 'Category deleted get successfully',

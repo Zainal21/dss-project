@@ -155,7 +155,7 @@ export class ClassificationsService {
       id: id,
     });
 
-    if (!classification)
+    if (classification?.affected < 1)
       throw new NotFoundException('Classification Data not found');
 
     return {
