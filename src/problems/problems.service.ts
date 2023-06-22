@@ -30,6 +30,7 @@ export class ProblemsService {
           id: userId,
         },
       },
+      relations: ['category', 'category'],
     });
 
     if (problems.length < 1) throw new NotFoundException('Problem not found');
