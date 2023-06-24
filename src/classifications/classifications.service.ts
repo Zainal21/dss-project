@@ -10,6 +10,7 @@ import { ApiResponse } from 'src/shared/utils/api-response.interface';
 import { ClassificationDto } from './classifications.dto';
 import { Users } from 'src/auth/entities/users.entity';
 import { Problems } from 'src/problems/problems.entity';
+import { formatPaginationResponse } from 'src/shared/utils/paginations';
 
 @Injectable()
 export class ClassificationsService {
@@ -28,8 +29,14 @@ export class ClassificationsService {
    *
    * @return  {Promise<ApiResponse>}          [return]
    */
-  async findByUserId(userId: string): Promise<ApiResponse> {
-    const classification = await this.classificationRepository.find({
+  async findByUserId(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<ApiResponse> {
+    const classification = await this.classificationRepository.findAndCount({
+      skip: page,
+      take: limit,
       where: {
         user: {
           id: userId,
@@ -40,9 +47,19 @@ export class ClassificationsService {
 
     if (classification.length < 1)
       throw new NotFoundException('Clasification Not Found');
+
+    const [results, total] = classification;
+
+    const classificationReposse = formatPaginationResponse(
+      page,
+      limit,
+      total,
+      results,
+    );
+
     return {
       statusCode: 200,
-      data: classification,
+      data: classificationReposse,
       message: 'classification by user id get successfully',
     };
   }

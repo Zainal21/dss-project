@@ -70,4 +70,18 @@ export class CategoriesController {
   async destroy(@Param() id: string) {
     return await this.categoriesService.deleteCategory(id);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('create-many')
+  async bulkInsertCategories(@Res() res: Response) {
+    const category = await this.categoriesService.bulkInsertCategories();
+
+    if (!category) throw new BadRequestException('Invalid Parameter');
+
+    res.status(HttpStatus.OK).json({
+      statusCode: category.statusCode,
+      message: category.message,
+      data: category.data,
+    });
+  }
 }

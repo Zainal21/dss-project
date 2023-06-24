@@ -8,6 +8,8 @@ import { Categories } from './categories.entity';
 import { Repository } from 'typeorm';
 import { ApiResponse } from 'src/shared/utils/api-response.interface';
 import { CategoryDto } from './categories.dto';
+import { v4 as uuid } from 'uuid';
+const id: string = uuid();
 
 @Injectable()
 export class CategoriesService {
@@ -102,6 +104,53 @@ export class CategoriesService {
       statusCode: 200,
       message: 'Category deleted get successfully',
       data: category,
+    };
+  }
+
+  /**
+   * [bulkInsertCategories]
+   *
+   * @param   {any<ApiResponse>}      data  [data]
+   *
+   * @return  {Promise<ApiResponse>}        [return]
+   */
+  async bulkInsertCategories(data?: any): Promise<ApiResponse> {
+    const categories = await this.categoryRepository.save([
+      {
+        categoryName: 'Personal',
+      },
+      {
+        categoryName: 'Study',
+      },
+      {
+        categoryName: 'Career',
+      },
+      {
+        categoryName: 'Economic Situation',
+      },
+      {
+        categoryName: 'Personal Relationship Social Life - Organizational',
+      },
+      {
+        categoryName: 'Activity',
+      },
+      {
+        categoryName: 'Future and Education / Service Life',
+      },
+      {
+        categoryName: 'Learning Habbits',
+      },
+      {
+        categoryName: 'Religion and Moral',
+      },
+      {
+        categoryName: 'Family Life',
+      },
+    ]);
+    return {
+      statusCode: 200,
+      message: 'Category insert many successfully',
+      data: categories,
     };
   }
 }

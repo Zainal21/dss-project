@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ClassificationsService } from './classifications.service';
@@ -23,8 +24,12 @@ export class ClassificationsController {
 
   @Get(':userId')
   @HttpCode(HttpStatus.OK)
-  async findByUserId(@Param('userId') userId: string) {
-    return this.classificationsService.findByUserId(userId);
+  async findByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.classificationsService.findByUserId(userId, page, limit);
   }
 
   @Get('/problem/:problemId')
