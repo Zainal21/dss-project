@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { ApiResponse } from 'src/shared/utils/api-response.interface';
 import { Users } from 'src/auth/entities/users.entity';
 import { Categories } from 'src/categories/categories.entity';
+import { formatPaginationResponse } from 'src/shared/utils/paginations';
 
 @Injectable()
 export class ProblemsService {
@@ -23,8 +24,14 @@ export class ProblemsService {
    *
    * @return  {Promise<ApiResponse>}          [return ]
    */
-  async getProblemByUserId(userId: string | any): Promise<ApiResponse> {
-    const problems = await this.problemRepository.find({
+  async getProblemByUserId(
+    userId: string | any,
+    page: number,
+    limit: number,
+  ): Promise<ApiResponse> {
+    const problems = await this.problemRepository.findAndCount({
+      skip: page,
+      take: limit,
       where: {
         user: {
           id: userId,
@@ -35,10 +42,14 @@ export class ProblemsService {
 
     if (problems.length < 1) throw new NotFoundException('Problem not found');
 
+    const [results, total] = problems;
+
+    const problemResult = formatPaginationResponse(page, limit, total, results);
+
     return {
       statusCode: 201,
       message: 'Problem by user get successfully',
-      data: problems,
+      data: problemResult,
     };
   }
 

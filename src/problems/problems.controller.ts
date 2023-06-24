@@ -10,6 +10,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ProblemsService } from './problems.service';
@@ -22,8 +23,12 @@ export class ProblemsController {
 
   @Get(':userId')
   @HttpCode(HttpStatus.OK)
-  getProblemByUserId(@Param('userId') userId) {
-    return this.problemsService.getProblemByUserId(userId);
+  getProblemByUserId(
+    @Param('userId') userId,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.problemsService.getProblemByUserId(userId, page, limit);
   }
 
   @Get(':id')
