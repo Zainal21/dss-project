@@ -19,8 +19,11 @@ import { Response } from 'express';
 import { CategoriesService } from './categories.service';
 import { AuthGuard } from 'src/shared/security/auth.guard';
 import { CategoryDto } from './categories.dto';
+import { Roles } from 'src/shared/security/roles/role.decorator';
+import { Role } from 'src/shared/security/roles/role.enum';
+import { RoleGuard } from 'src/shared/security/roles/role.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('categories')
 @UsePipes(new ValidationPipe({ transform: true }))
 export class CategoriesController {
@@ -47,6 +50,7 @@ export class CategoriesController {
 
   @HttpCode(HttpStatus.OK)
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() categoryDto: CategoryDto, @Res() res: Response) {
     const category = await this.categoriesService.createCategory(categoryDto);
 
@@ -61,18 +65,21 @@ export class CategoriesController {
 
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
+  @Roles(Role.Admin)
   async update(@Body() categoryDto: CategoryDto, @Param('id') id) {
     return await this.categoriesService.updateCategory(id, categoryDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
+  @Roles(Role.Admin)
   async destroy(@Param() id: string) {
     return await this.categoriesService.deleteCategory(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('create-many')
+  @Roles(Role.Admin)
   async bulkInsertCategories(@Res() res: Response) {
     const category = await this.categoriesService.bulkInsertCategories();
 

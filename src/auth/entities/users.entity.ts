@@ -1,3 +1,4 @@
+import { MinLength } from 'class-validator';
 import { Problems } from 'src/problems/problems.entity';
 import {
   Column,
@@ -12,16 +13,24 @@ export class Users {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+  })
   fullname: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+  })
   email: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+  })
   password: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+  })
   address: string;
 
   @Column('text')
@@ -32,6 +41,9 @@ export class Users {
 
   @OneToMany(() => Problems, (problem) => problem.user)
   problem: Problems[];
+
+  @Column({ type: 'varchar', default: 'user' })
+  role: string;
 
   @CreateDateColumn()
   createdAt: Date;

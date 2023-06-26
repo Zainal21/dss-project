@@ -33,4 +33,7 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsDateString()
   dateOfBirth: string;
+
+  @IsString()
+  role: string;
 }
